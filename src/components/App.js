@@ -19,30 +19,64 @@ class App extends Component {
         this.props.addReminder(this.state.text);
     }
 
+    renderReminders() {
+        const { reminders } = this.props;
+
+        return (
+
+<ul className="list-group">
+    {
+        reminders.map( reminder => {
+            return (
+                <li key={reminder.id} className="list-group-item">
+                    <div>{reminder.text}</div>
+                </li>
+            )
+        })
+    }
+</ul>
+
+        )
+    }
+
     render() {
         return (
-          <div className="App">
-            <div className="title">
-                Reminder Pro
-            </div>
+<div className="container mt-5">
 
-            <div className="form-inline">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        placeholder="I have to ..."
-                        onChange={event => this.setState({text: event.target.value})}
-                    />
+    <div className="row">
+        <div className="col-12 text-center">
+            <h1>Reminder Pro</h1>
+        </div>
+    </div>
+
+    <div className="row mt-5">
+        <div className="col-12">
+            <div className="input-group">
+                <input
+                    className="form-control"
+                    placeholder="I have to ..."
+                    onChange={event => this.setState({text: event.target.value})}
+                />
+                <div className="input-group-append">
+                    <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => this.addReminder()}
+                    >
+                        Add Reminder
+                    </button>
                 </div>
-                <button
-                    type="button"
-                    className="btn btn-success"
-                    onClick={() => this.addReminder()}
-                >
-                    Add Reminder
-                </button>
             </div>
-          </div>
+        </div>
+    </div>
+
+    <div className="row mt-5">
+        <div className="col-12">
+            { this.renderReminders() }
+        </div>
+    </div>
+
+</div>
         );
     }
 }
@@ -51,4 +85,10 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({addReminder}, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(App);
+function mapStateToProps(state) {
+    return {
+        reminders: state
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
