@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addReminder, deleteReminder } from '../actions/index';
+import { addReminder, deleteReminder, clearReminders } from '../actions/index';
 import moment from 'moment';
 
 import './App.css';
@@ -69,26 +69,36 @@ class App extends Component {
 
     <div className="row mt-5">
         <div className="col-12">
-            <div className="input-group">
+            <div className="form-group">
                 <input
                     className="form-control"
                     placeholder="I have to ..."
                     onChange={event => this.setState({text: event.target.value})}
                 />
+            </div>
+            <div className="form-group">
                 <input
                     className="form-control"
                     type="date"
                     onChange={event => this.setState({dueDate: event.target.value})}
                 />
-                <div className="input-group-append">
-                    <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() => this.addReminder()}
-                    >
-                        Add Reminder
-                    </button>
-                </div>
+            </div>
+
+            <div className="d-flex justify-content-end">
+                <button
+                    type="button"
+                    className="btn btn-danger mr-3"
+                    onClick={() => this.props.clearReminders()}
+                >
+                    Clear Reminders
+                </button>
+                <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={() => this.addReminder()}
+                >
+                    Add Reminder
+                </button>
             </div>
         </div>
     </div>
@@ -105,7 +115,7 @@ class App extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({addReminder, deleteReminder}, dispatch);
+    return bindActionCreators({addReminder, deleteReminder, clearReminders}, dispatch);
 }
 
 function mapStateToProps(state) {
