@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addReminder } from '../actions/index';
+import { addReminder, deleteReminder } from '../actions/index';
 
 
 import './App.css';
@@ -19,6 +19,10 @@ class App extends Component {
         this.props.addReminder(this.state.text);
     }
 
+    deleteReminder(id) {
+        this.props.deleteReminder(id);
+    }
+
     renderReminders() {
         const { reminders } = this.props;
 
@@ -28,8 +32,15 @@ class App extends Component {
     {
         reminders.map( reminder => {
             return (
-                <li key={reminder.id} className="list-group-item">
-                    <div>{reminder.text}</div>
+                <li key={reminder.id}
+                    className="list-group-item d-flex justify-content-between align-items-center">
+
+                    {reminder.text}
+
+                    <span
+                        className="badge"
+                        onClick={ () => this.deleteReminder(reminder.id) }
+                        >&#x2715;</span>
                 </li>
             )
         })
@@ -82,7 +93,7 @@ class App extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({addReminder}, dispatch);
+    return bindActionCreators({addReminder, deleteReminder}, dispatch);
 }
 
 function mapStateToProps(state) {
