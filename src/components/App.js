@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addReminder, deleteReminder } from '../actions/index';
-
+import moment from 'moment';
 
 import './App.css';
 
@@ -11,12 +11,13 @@ class App extends Component {
         super(props);
 
         this.state = {
-            text: ''
+            text: '',
+            dueDate: ''
         }
     }
 
     addReminder() {
-        this.props.addReminder(this.state.text);
+        this.props.addReminder(this.state.text, this.state.dueDate);
     }
 
     deleteReminder(id) {
@@ -33,14 +34,20 @@ class App extends Component {
         reminders.map( reminder => {
             return (
                 <li key={reminder.id}
-                    className="list-group-item d-flex justify-content-between align-items-center">
+                    className="list-group-item">
+                    <div className="d-flex justify-content-between align-items-center">
+                        {reminder.text}
 
-                    {reminder.text}
+                        <span
+                            className="badge"
+                            onClick={ () => this.deleteReminder(reminder.id) }
+                            >&#x2715;
+                        </span>
+                    </div>
 
-                    <span
-                        className="badge"
-                        onClick={ () => this.deleteReminder(reminder.id) }
-                        >&#x2715;</span>
+                    <div className="font-italic">
+                        {moment(new Date(reminder.dueDate)).fromNow()}
+                    </div>
                 </li>
             )
         })
@@ -67,6 +74,11 @@ class App extends Component {
                     className="form-control"
                     placeholder="I have to ..."
                     onChange={event => this.setState({text: event.target.value})}
+                />
+                <input
+                    className="form-control"
+                    type="date"
+                    onChange={event => this.setState({dueDate: event.target.value})}
                 />
                 <div className="input-group-append">
                     <button
